@@ -15,11 +15,24 @@ build:
 	docker build -t $(IMAGE_NAME) .
 
 run:
-	@echo "🚀 Running GeoServer container..."
-	docker run -d -p $(GEOSERVER_PORT):8080 \
-	  -v $(PWD)/data_dir:/opt/geoserver/data_dir \
-	  --name $(CONTAINER_NAME) \
-	  $(IMAGE_NAME)
+	@if docker ps --format '{{.Names}}' | grep -q "^$(CONTAINER_NAME)$$"; then \
+		echo "⚠️ Container $(CONTAINER_NAME) already running"; \
+		exit 0; \
+	elif docker ps -a --format '{{.Names}}' | grep -q "^$(CONTAINER_NAME)$$"; then \
+		echo "🔄 Starting GeoServer container..."; \
+		docker start $(CONTAINER_NAME); \
+	else \
+		echo "🚀 Running GeoServer container..."; \
+		docker run -d -p $(GEOSERVER_PORT):8080 \
+			-v $(PWD)/data_dir:/opt/geoserver/data_dir \
+			--name $(CONTAINER_NAME) \
+			$(IMAGE_NAME); \
+	fi
+	@echo "⏳ Waiting for GeoServer ready..."
+	@while ! docker logs $(CONTAINER_NAME) 2>&1 | grep -q "Started @"; do \
+		sleep 2; \
+	done
+	@echo "✅ GeoServer is ready! Visit: http://localhost:$(GEOSERVER_PORT)/geoserver"
 
 stop:
 	@echo "🚀 Stopping GeoServer container..."

@@ -1,93 +1,132 @@
-![Geoserver.org](https://upload.wikimedia.org/wikipedia/commons/9/9e/GeoServer_logo.png)
-
-
-| Name       | Version    |
-|-----------|------------|
-| Geoserver | 2.20.4     |
-| GDAL      | 2.3.1      |
-| ECW Lib   | 5.4 SDK    |
-| Java      | OpenJDK 17 |
-
-
-### Plugins
-
-- WPS Extencion
-- GDAL Extencion
-- Vector tiles Extencion
-- MBTiles Extencion
-
-### ERDAS ECW lib
-
-To unpack and extract the contents of the `ERDAS_ECWJP2_SDK-5.4.0.bin` file, which is likely a self-extracting binary installer (often used for proprietary libraries like ERDAS ECW SDK), you typically need to do the following:
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/GeoServer_logo.png" alt="Geoserver.org" width="300"/>
 
 ---
 
-### Steps to Extract `ERDAS_ECWJP2_SDK-5.4.0.bin`
+# 🌍 GeoServer with ECW 5.4 SDK Support
 
-1. **Make the file executable (if it isn't already):**
+| Component     | Version    |
+| ------------- | ---------- |
+| **GeoServer** | 2.20.4     |
+| **GDAL**      | 2.3.1      |
+| **ECW SDK**   | 5.4        |
+| **Java**      | OpenJDK 17 |
 
-   ```bash
-   chmod +x ERDAS_ECWJP2_SDK-5.4.0.bin
-   ```
+### 🔌 Installed Plugins
 
-2. **Run the installer:**
-
-   ```bash
-   ./ERDAS_ECWJP2_SDK-5.4.0.bin
-   ```
-
-3. **Follow the on-screen instructions** to choose an installation directory or accept the license agreement (if prompted).
-
-Here's an English description you can add to your repository's README or documentation:
+* WPS
+* GDAL
+* Vector Tiles
+* MBTiles
 
 ---
 
-### `ECW` Directory
+## 🧱 System Layer
 
-The `ECW` directory contains the extracted contents of the `ERDAS_ECWJP2_SDK-5.4.0.bin` installer. This includes the binaries, libraries, and resources required to work with the **ERDAS ECW/JP2 SDK**.
+**Operating System:** Ubuntu 18.04 LTS (or compatible)
 
-> ⚠️ This version includes a **Desktop Read-Only Redistributable**, which allows decoding (reading) of ECW and JPEG2000 images, but **does not permit encoding (writing)**.
+### 📦 Required System Dependencies
 
-No modifications were made to the original files — they were unpacked as-is from the official installer.
+Ensure the following packages are installed on your system:
+
+* `libpng-dev`
+* `libudunits2-dev`
+* `libgdal-dev`
+* `libgeos-dev`
+* `libproj-dev`
+* `libgdal-java`
+* `build-essential`
+* `openjdk-17-jre-headless`
+* `make`
+* `wget`
+* `curl`
+* `unzip`
 
 ---
 
-## System layer
+## 🧩 Installing the ERDAS ECW SDK
 
-### Linux Ubuntu 18.04 LTS
+Follow the steps below to install the ECW/JP2 SDK into the existing `ECW` directory in your project.
 
-### Dependencies install 
-```shell
-sudo apt update && sudo apt install -y \
-libpng-dev \
-libudunits2-dev \
-libgdal-dev \
-libgeos-dev \
-libproj-dev \
-libgdal-java \
-build-essential \
-openjdk-17-jre-headless \
-make \
-wget \
-curl \
-unzip
+### 1. 🔽 Download the Installer
+
+Get the installer from one of the following sources:
+
+* 🌐 [Official Hexagon Website](https://www.hexagongeospatial.com/)
+* ☁️ [Google Drive Mirror](https://drive.google.com/file/d/1-lbjlrV4wspphkufGGzZoXiitIC4m_Bc/view?usp=share_link)
+
+> The file should be named something like: `ERDAS_ECWJP2_SDK-5.4.0.bin`
+
+---
+
+### 2. 📁 Move the Installer into the `ECW` Directory
+
+```bash
+mv ERDAS_ECWJP2_SDK-5.4.0.bin ECW/
 ```
 
+---
 
-## Container usage
+### 3. 🔽 Navigate into the `ECW` Directory
 
-In system with installed Docker use command to download the image
+```bash
+cd ECW
+```
 
-`` docker pull ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4 ``
+---
 
-To run without parameters:
+### 4. ✅ Make the Installer Executable
 
-`` docker run -d -p <host_port>:8080 ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4 ``
+```bash
+chmod +x ERDAS_ECWJP2_SDK-5.4.0.bin
+```
 
-If you want to use Geoserver with your local files you should use *-v* option to connect volume
+---
 
-``  docker run -d -p <host_port>:8080 -v <host/path/to/dir>:/opt/geoserver/data_dir ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4  ``
+### 5. ▶ Run the Installer
 
-After running container will be available on *http://localhost:<host_port>/geoserver*
+```bash
+./ERDAS_ECWJP2_SDK-5.4.0.bin
+```
 
+During installation:
+
+* Select the **Desktop Read-Only License** (usually **option 1**)
+* Accept the license agreement by typing `yes`
+
+---
+
+### 📁 Installation Result
+
+After the installer completes, the `ECW` directory will contain all necessary binaries, headers, and libraries required to build and run ECW/JP2-enabled applications.
+
+---
+
+## 🐳 Running GeoServer via Docker
+
+### 📥 Pull the Image
+
+```bash
+docker pull ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+```
+
+---
+
+### 🚀 Run the Container
+
+#### Basic Run:
+
+```bash
+docker run -d -p <host_port>:8080 ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+```
+
+#### With Mounted Data Directory:
+
+```bash
+docker run -d -p <host_port>:8080 \
+  -v <host/path/to/dir>:/opt/geoserver/data_dir \
+  ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+```
+
+Once the container is up, GeoServer will be accessible at:
+📍 `http://localhost:<host_port>/geoserver`
 

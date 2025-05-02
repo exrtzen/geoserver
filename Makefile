@@ -1,5 +1,5 @@
 ECW_DIR=./ECW
-VALIDATOR=./validate-ecw.sh
+VALIDATOR=./scripts/validate-ecw.sh
 IMAGE_NAME=ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
 GEOSERVER_PORT=8080
 CONTAINER_NAME=geoserver

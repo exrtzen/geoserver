@@ -101,6 +101,41 @@ After the installer completes, the `ECW` directory will contain all necessary bi
 
 ---
 
+
+## 🛠️ Docker Build
+
+You can build your own Docker image with ECW support.
+
+### ⚠ Prerequisite
+
+> The `ECW/` directory **must** contain the **extracted ECW SDK** (i.e., the result of running `ERDAS_ECWJP2_SDK-5.4.0.bin`).
+
+Make sure the directory structure looks like this before building:
+
+```
+project-root/
+├── Dockerfile
+├── ECW/
+│   ├── lib/
+│   ├── include/
+│   ├── ...
+│   └── .gitkeep
+```
+
+---
+
+### 🔧 Build the Docker Image
+
+Run the following command from the project root:
+
+```bash
+docker build -t <your-tag-name> .
+```
+
+Replace `<your-tag-name>` with a meaningful tag (e.g., `geoserver:ecw-local`).
+
+---
+
 ## 🐳 Running GeoServer via Docker
 
 ### 📥 Pull the Image
@@ -129,4 +164,3 @@ docker run -d -p <host_port>:8080 \
 
 Once the container is up, GeoServer will be accessible at:
 📍 `http://localhost:<host_port>/geoserver`
-

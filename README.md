@@ -102,65 +102,75 @@ After the installer completes, the `ECW` directory will contain all necessary bi
 ---
 
 
-## 🛠️ Docker Build
+## 🐳 Docker Workflow (via `Makefile`)
 
-You can build your own Docker image with ECW support.
+A `Makefile` is included to automate validation, image build, container run, stop, and cleanup.
 
-### ⚠ Prerequisite
+### 🔧 Variables (can be overridden)
 
-> The `ECW/` directory **must** contain the **extracted ECW SDK** (i.e., the result of running `ERDAS_ECWJP2_SDK-5.4.0.bin`).
-
-Make sure the directory structure looks like this before building:
-
-```
-project-root/
-├── Dockerfile
-├── ECW/
-│   ├── lib/
-│   ├── include/
-│   ├── ...
-│   └── .gitkeep
+```makefile
+ECW_DIR=./ECW
+VALIDATOR=./scripts/validate-ecw.sh
+IMAGE_NAME=ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+GEOSERVER_PORT=8080
+CONTAINER_NAME=geoserver
 ```
 
 ---
 
-### 🔧 Build the Docker Image
+### 🧪 Validate ECW Directory
 
-Run the following command from the project root:
+Ensure that the ECW SDK has been properly extracted:
 
 ```bash
-docker build -t <your-tag-name> .
+make validate
 ```
 
-Replace `<your-tag-name>` with a meaningful tag (e.g., `geoserver:ecw-local`).
+This will run `./scripts/validate-ecw.sh` and check for required files in `$(ECW_DIR)`.
 
 ---
 
-## 🐳 Running GeoServer via Docker
+### 🛠️ Build the Docker Image
 
-### 📥 Pull the Image
+Build the image using:
 
 ```bash
-docker pull ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+make build
+```
+
+Or run validation and build in one step:
+
+```bash
+make
 ```
 
 ---
 
 ### 🚀 Run the Container
 
-#### Basic Run:
-
 ```bash
-docker run -d -p <host_port>:8080 ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+make run
 ```
 
-#### With Mounted Data Directory:
+By default, it will:
+
+* Expose GeoServer at `http://localhost:8080/geoserver`
+* Mount `./data_dir` as `/opt/geoserver/data_dir`
+
+---
+
+### 🛑 Stop the Container
 
 ```bash
-docker run -d -p <host_port>:8080 \
-  -v <host/path/to/dir>:/opt/geoserver/data_dir \
-  ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4
+make stop
 ```
 
-Once the container is up, GeoServer will be accessible at:
-📍 `http://localhost:<host_port>/geoserver`
+---
+
+### 🧹 Clean Everything
+
+This will stop and remove the container, delete the mounted volume directory, and remove the image:
+
+```bash
+make clean
+```

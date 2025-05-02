@@ -78,15 +78,15 @@ unzip
 
 In system with installed Docker use command to download the image
 
-`` docker pull registry.urban-its.ru/services/geoserver/geoserver:<geoserver_version> ``
+`` docker pull ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4 ``
 
 To run without parameters:
 
-`` docker run -d -p <host_port>:8080 registry.urban-its.ru/services/geoserver/geoserver:<geoserver_version> ``
+`` docker run -d -p <host_port>:8080 ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4 ``
 
 If you want to use Geoserver with your local files you should use *-v* option to connect volume
 
-``  docker run -d -p <host_port>:8080 -v <host/path/to/dir>:/opt/geoserver/data_dir registry.urban-its.ru/services/geoserver/geoserver:<geoserver_version>  ``
+``  docker run -d -p <host_port>:8080 -v <host/path/to/dir>:/opt/geoserver/data_dir ghcr.io/exrtzen/geoserver:2.20.4-ecw5.4  ``
 
 After running container will be available on *http://localhost:<host_port>/geoserver*
 
